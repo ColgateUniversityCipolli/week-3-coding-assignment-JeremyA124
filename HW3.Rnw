@@ -50,8 +50,58 @@ to this \texttt{.Rnw} file.\\
 \textbf{Solution:} 
 % Write your answer and explanations here.
 
-<<size="scriptsize", warning=F, message=F>>=
-# Copy your solution code here.
+<<size="scriptsize", warning=F, message=F, comment=NA>>=
+#Vector of primes to iterate through
+prime.list = c(2, 3, 5, 7, 11,
+               13, 17, 19, 23, 29,
+               31, 37, 41, 43, 47,
+               53, 59, 61, 67, 71,
+               73, 79, 83, 89, 97)
+
+#Vector of numbers we have to check
+nums.to.check = c(6, 10, 14, 15, 21,
+                  22, 26, 33, 34, 35,
+                  38, 39, 46, 51, 55,
+                  57, 58, 62, 65, 69,
+                  75, 77, 82, 85, 86,
+                  87, 91, 93, 94, 95)
+
+#Iterates through the list of numbers and checks if it has a prime factor.
+#If it does, then it will check if the corresponding factor is also prime.
+#If not, then the number is the outlier and gives us a vector of numbers
+#where the real number will be.
+
+for(i in 1:length(nums.to.check)){
+  for(prime in prime.list){
+    if(nums.to.check[i] %% prime == 0){
+      products = prime * prime.list[-which(prime.list == prime)]
+      if(!(nums.to.check[i] %in% products)){
+        outlier = nums.to.check[i]
+        possible.fixes = c((nums.to.check[i-1] + 1):((nums.to.check[i+1] - 1)))
+      }
+    }
+  }
+}
+
+#Iterates through the numbers in possible.fixes to find the number
+#with a product of unique prime numbers.
+
+for(num in possible.fixes){
+  for(prime in prime.list){
+    if(num %% prime == 0){
+      products = prime * prime.list
+      if((num %in% products) & (!(num %in% nums.to.check))){
+        fix = num
+      }
+    }
+  }
+}
+
+display.ans = paste("The outlier number is:", outlier)
+display.ans2 = paste("The real number is:", fix)
+
+print(display.ans)
+print(display.ans2)
 @
 \end{enumerate}
 
